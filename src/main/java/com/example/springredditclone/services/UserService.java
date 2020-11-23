@@ -7,4 +7,6 @@ public interface UserService extends UserDetailsService {
 
     UserDto createUser(UserDto userDto);
 
+    void verifyAccount(String token);
+
 }

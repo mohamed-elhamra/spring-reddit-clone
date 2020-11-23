@@ -16,6 +16,8 @@ public class WebConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, SecurityConstants.SIGN_UP_URL)
                 .permitAll()
+                .antMatchers(HttpMethod.GET, SecurityConstants.SIGN_UP_URL + "/accountVerification/**")
+                .permitAll()
                 .anyRequest()
                 .authenticated();
     }

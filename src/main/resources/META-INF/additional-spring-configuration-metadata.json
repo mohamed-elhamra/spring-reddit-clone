@@ -1,0 +1,18 @@
+{
+  "properties": [
+    {
+      "name": "mail",
+      "type": "java.lang.String",
+      "description": "Description for mail."
+    },
+    {
+      "name": "sbpg.init.number",
+      "type": "java.lang.String",
+      "description": "Description for sbpg.init.number."
+    },
+    {
+      "name": "email",
+      "type": "java.lang.String",
+      "description": "Description for email."
+    }
+  ] }
