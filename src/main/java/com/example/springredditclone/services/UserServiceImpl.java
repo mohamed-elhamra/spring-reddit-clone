@@ -5,13 +5,18 @@ import com.example.springredditclone.dtos.UserDto;
 import com.example.springredditclone.entities.UserEntity;
 import com.example.springredditclone.entities.VerificationTokenEntity;
 import com.example.springredditclone.exceptions.SpringRedditException;
-import com.example.springredditclone.reponses.UserResponse;
 import com.example.springredditclone.repositories.UserRepository;
 import com.example.springredditclone.repositories.VerificationTokenRepository;
 import com.example.springredditclone.utils.IDGenerator;
 import com.example.springredditclone.utils.Mapper;
 import com.example.springredditclone.utils.NotificationEmail;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -19,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -41,8 +47,15 @@ public class UserServiceImpl implements UserService {
     private MailService mailService;
 
     @Override
-    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        return null;
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        UserEntity userEntity = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with this email: " + email));
+
+        ArrayList<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority("USER"));
+
+        return new User(userEntity.getEmail(), userEntity.getEncryptedPassword(), userEntity.isEnabled(),
+                true, true, true, authorities);
     }
 
     public UserDto createUser(UserDto userDto) {
@@ -86,5 +99,13 @@ public class UserServiceImpl implements UserService {
         userEntity.setEnabled(true);
         userRepository.save(userEntity);
     }
+
+    @Override
+    public UserDto getUserByEmail(String email) {
+        UserEntity userEntity = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with this email: " + email));
+        return Mapper.getMapper().map(userEntity, UserDto.class);
+    }
+
 
 }
