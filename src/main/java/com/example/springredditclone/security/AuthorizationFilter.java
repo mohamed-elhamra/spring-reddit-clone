@@ -30,10 +30,10 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
 
         if (token == null || !token.startsWith(SecurityConstants.TOKEN_PREFIX)) {
             chain.doFilter(request, response);
+            return;
         }
 
-        if (token != null)
-            token = token.replace(SecurityConstants.TOKEN_PREFIX, "");
+        token = token.replace(SecurityConstants.TOKEN_PREFIX, "");
 
         Claims claims = Jwts.parser()
                 .setSigningKey(SecurityConstants.TOKEN_SECRET)

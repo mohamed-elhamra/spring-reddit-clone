@@ -2,6 +2,7 @@ package com.example.springredditclone.services;
 
 import com.example.springredditclone.dtos.SubredditDto;
 import com.example.springredditclone.entities.SubredditEntity;
+import com.example.springredditclone.exceptions.SpringRedditException;
 import com.example.springredditclone.repositories.SubredditRepository;
 import com.example.springredditclone.utils.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,13 @@ public class SubredditServiceImpl implements SubredditService {
         return subredditEntityList.stream()
                 .map(subredditEntity -> Mapper.getMapper().map(subredditEntity, SubredditDto.class))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public SubredditDto getSubredditById(long id) {
+        SubredditEntity subredditEntity = subredditRepository.findById(id)
+                .orElseThrow(() -> new SpringRedditException("No subreddit found with this id: " + id));
+        return Mapper.getMapper().map(subredditEntity, SubredditDto.class);
     }
 
 }

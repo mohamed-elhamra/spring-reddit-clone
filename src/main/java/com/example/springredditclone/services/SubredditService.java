@@ -9,4 +9,6 @@ public interface SubredditService {
     SubredditDto createSubreddit(SubredditDto subredditDto);
 
     List<SubredditDto> getAllSubreddits();
+
+    SubredditDto getSubredditById(long id);
 }

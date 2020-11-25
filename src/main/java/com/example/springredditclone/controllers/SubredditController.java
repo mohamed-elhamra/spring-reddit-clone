@@ -28,7 +28,7 @@ public class SubredditController {
     private ModelMapper modelMapper;
 
     @PostMapping
-    public ResponseEntity<?> createSubreddit(@RequestBody SubredditRequest subredditRequest){
+    public ResponseEntity<?> createSubreddit(@RequestBody SubredditRequest subredditRequest) {
         SubredditDto subredditDto = Mapper.getMapper().map(subredditRequest, SubredditDto.class);
         SubredditDto createdSubreddit = subredditService.createSubreddit(subredditDto);
         SubredditResponse subredditResponse = modelMapper.map(createdSubreddit, SubredditResponse.class);
@@ -37,13 +37,21 @@ public class SubredditController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getAllSubreddits(){
+    public ResponseEntity<?> getAllSubreddits() {
         List<SubredditDto> subredditDtoList = subredditService.getAllSubreddits();
         List<SubredditResponse> subredditResponses = subredditDtoList.stream()
-                .map(subredditDto->modelMapper.map(subredditDto, SubredditResponse.class))
+                .map(subredditDto -> modelMapper.map(subredditDto, SubredditResponse.class))
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(subredditResponses);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<SubredditResponse> getSubredditById(@PathVariable long id) {
+        SubredditDto subredditDto = subredditService.getSubredditById(id);
+        SubredditResponse subredditResponse = modelMapper.map(subredditDto, SubredditResponse.class);
+
+        return ResponseEntity.ok(subredditResponse);
     }
 
 }

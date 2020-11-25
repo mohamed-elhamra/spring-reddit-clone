@@ -27,6 +27,7 @@ public class PostEntity {
     @Lob
     private String description;
 
+    @Column(columnDefinition = "integer default 0")
     private Integer voteCount = 0;
     private Instant createdDate;
 
