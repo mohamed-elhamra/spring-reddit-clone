@@ -2,7 +2,7 @@ package com.example.springredditclone.controllers;
 
 
 import com.example.springredditclone.dtos.UserDto;
-import com.example.springredditclone.reponses.UserResponse;
+import com.example.springredditclone.responses.UserResponse;
 import com.example.springredditclone.requests.UserRequest;
 import com.example.springredditclone.services.UserService;
 import com.example.springredditclone.utils.Mapper;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-@Controller
+@RestController
 @RequestMapping("/users")
 public class UserController {
 

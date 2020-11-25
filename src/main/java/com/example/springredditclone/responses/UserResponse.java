@@ -1,4 +1,4 @@
-package com.example.springredditclone.reponses;
+package com.example.springredditclone.responses;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
