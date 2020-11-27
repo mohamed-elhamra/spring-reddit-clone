@@ -1,12 +1,16 @@
 package com.example.springredditclone.services;
 
 
+import com.example.springredditclone.dtos.CommentDto;
 import com.example.springredditclone.dtos.UserDto;
+import com.example.springredditclone.entities.CommentEntity;
 import com.example.springredditclone.entities.UserEntity;
 import com.example.springredditclone.entities.VerificationTokenEntity;
 import com.example.springredditclone.exceptions.SpringRedditException;
+import com.example.springredditclone.repositories.CommentRepository;
 import com.example.springredditclone.repositories.UserRepository;
 import com.example.springredditclone.repositories.VerificationTokenRepository;
+import com.example.springredditclone.responses.CommentResponse;
 import com.example.springredditclone.utils.IDGenerator;
 import com.example.springredditclone.utils.Mapper;
 import com.example.springredditclone.utils.NotificationEmail;
@@ -27,8 +31,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -44,6 +50,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private VerificationTokenRepository verificationTokenRepository;
+
+    @Autowired
+    private CommentRepository commentRepository;
 
     @Autowired
     private MailService mailService;
@@ -109,10 +118,21 @@ public class UserServiceImpl implements UserService {
         return Mapper.getMapper().map(userEntity, UserDto.class);
     }
 
-    public UserEntity getCurrentUser(){
-        Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
+    public UserEntity getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return userRepository.findByEmail(authentication.getName())
-                .orElseThrow(()-> new UsernameNotFoundException("No user found with this email: " + authentication.getName()));
+                .orElseThrow(() -> new UsernameNotFoundException("No user found with this email: " + authentication.getName()));
+    }
+
+    @Override
+    public List<CommentDto> getCommentsByUser(String email) {
+        UserEntity user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("No user found with this email: " + email));
+        List<CommentEntity> commentEntities = commentRepository.findAllByUser(user);
+
+        return commentEntities.stream()
+                .map(commentEntity -> Mapper.getMapper().map(commentEntity, CommentDto.class))
+                .collect(Collectors.toList());
     }
 
 }

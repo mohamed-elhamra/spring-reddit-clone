@@ -2,21 +2,19 @@ package com.example.springredditclone.dtos;
 
 import com.example.springredditclone.entities.PostEntity;
 import com.example.springredditclone.entities.UserEntity;
+import com.example.springredditclone.utils.VoteType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.Instant;
-
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class CommentDto {
+@AllArgsConstructor
+public class VoteDto {
 
     private long id;
-    private String text;
-    private Instant createdDate;
-    private PostDto post;
-    private UserDto user;
+    private VoteType voteType;
+    private PostEntity post;
+    private UserEntity user;
 
 }

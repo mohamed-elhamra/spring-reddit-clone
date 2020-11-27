@@ -2,12 +2,14 @@ package com.example.springredditclone;
 
 import com.example.springredditclone.dtos.PostDto;
 import com.example.springredditclone.dtos.SubredditDto;
+import com.example.springredditclone.repositories.CommentRepository;
 import com.example.springredditclone.responses.SubredditResponse;
 import org.modelmapper.AbstractConverter;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
@@ -25,8 +27,8 @@ public class SpringRedditCloneApplication {
         SpringApplication.run(SpringRedditCloneApplication.class, args);
     }
 
-    @Bean("CustomizedMapper")
-    public ModelMapper getModelMapper() {
+    @Bean("PostsListToPostsCount")
+    public ModelMapper postsListToPostsCount() {
         ModelMapper modelMapper = new ModelMapper();
         Converter<List<PostDto>, Integer> subredditPostsListToPostsCountConverter =
                 new AbstractConverter<>() {

@@ -37,6 +37,7 @@ public class CommentServiceImpl implements CommentService {
                 .orElseThrow(() -> new SpringRedditException("No user found with this email:" + userEmail));
 
         CommentEntity commentEntity = Mapper.getMapper().map(commentDto, CommentEntity.class);
+        commentEntity.setId(0);
         commentEntity.setCreatedDate(Instant.now());
         commentEntity.setUser(user);
         commentEntity.setPost(post);

@@ -1,8 +1,10 @@
 package com.example.springredditclone.controllers;
 
 
+import com.example.springredditclone.dtos.CommentDto;
 import com.example.springredditclone.dtos.PostDto;
 import com.example.springredditclone.requests.PostRequest;
+import com.example.springredditclone.responses.CommentResponse;
 import com.example.springredditclone.responses.PostResponse;
 import com.example.springredditclone.services.PostService;
 import com.example.springredditclone.utils.Mapper;
@@ -45,6 +47,15 @@ public class PostController {
         PostDto postDto = postService.getPostById(id);
         PostResponse postResponse = Mapper.getMapper().map(postDto, PostResponse.class);
         return ResponseEntity.ok(postResponse);
+    }
+
+    @GetMapping("/{postId}/comments")
+    public ResponseEntity<?>getAllCommentsByPost(@PathVariable long postId){
+        List<CommentDto> comments = postService.getCommentsByPost(postId);
+        List<CommentResponse> responseList = comments.stream()
+                .map(commentDto -> Mapper.getMapper().map(commentDto, CommentResponse.class))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(responseList);
     }
 
 }

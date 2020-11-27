@@ -1,20 +1,17 @@
 package com.example.springredditclone.responses;
 
+import com.example.springredditclone.utils.VoteType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.Instant;
-
-
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class CommentResponse {
+@AllArgsConstructor
+public class VoteResponse {
 
-    private String text;
-    private Instant createdDate;
+    private VoteType voteType;
     private long postId;
-    private String userUserName;
+    private String userUSerName;
 
 }

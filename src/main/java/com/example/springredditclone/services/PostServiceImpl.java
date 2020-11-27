@@ -1,10 +1,13 @@
 package com.example.springredditclone.services;
 
+import com.example.springredditclone.dtos.CommentDto;
 import com.example.springredditclone.dtos.PostDto;
+import com.example.springredditclone.entities.CommentEntity;
 import com.example.springredditclone.entities.PostEntity;
 import com.example.springredditclone.entities.SubredditEntity;
 import com.example.springredditclone.entities.UserEntity;
 import com.example.springredditclone.exceptions.SpringRedditException;
+import com.example.springredditclone.repositories.CommentRepository;
 import com.example.springredditclone.repositories.PostRepository;
 import com.example.springredditclone.repositories.SubredditRepository;
 import com.example.springredditclone.repositories.UserRepository;
@@ -29,6 +32,9 @@ public class PostServiceImpl implements PostService {
 
     @Autowired
     private SubredditRepository subredditRepository;
+
+    @Autowired
+    private CommentRepository commentRepository;
 
     @Override
     public PostDto createPost(PostDto postDto, String email, String subredditName) {
@@ -60,5 +66,16 @@ public class PostServiceImpl implements PostService {
         PostEntity postEntity = postRepository.findById(id)
                 .orElseThrow(() -> new SpringRedditException("No post found with this id: " + id));
         return Mapper.getMapper().map(postEntity, PostDto.class);
+    }
+
+    @Override
+    public List<CommentDto> getCommentsByPost(long postId) {
+        PostEntity post = postRepository.findById(postId)
+                .orElseThrow(() -> new SpringRedditException("No post found with this id: " + postId));
+        List<CommentEntity> commentEntities = commentRepository.findAllByPost(post);
+
+        return commentEntities.stream()
+                .map(commentEntity -> Mapper.getMapper().map(commentEntity, CommentDto.class))
+                .collect(Collectors.toList());
     }
 }
