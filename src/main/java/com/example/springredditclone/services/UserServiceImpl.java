@@ -14,8 +14,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -107,5 +109,10 @@ public class UserServiceImpl implements UserService {
         return Mapper.getMapper().map(userEntity, UserDto.class);
     }
 
+    public UserEntity getCurrentUser(){
+        Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
+        return userRepository.findByEmail(authentication.getName())
+                .orElseThrow(()-> new UsernameNotFoundException("No user found with this email: " + authentication.getName()));
+    }
 
 }
