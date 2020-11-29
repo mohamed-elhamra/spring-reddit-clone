@@ -3,8 +3,11 @@ package com.example.springredditclone.security;
 import com.example.springredditclone.SpringApplicationContext;
 import com.example.springredditclone.dtos.UserDto;
 import com.example.springredditclone.requests.UserLoginRequest;
+import com.example.springredditclone.responses.AuthenticationResponse;
+import com.example.springredditclone.services.RefreshTokenService;
 import com.example.springredditclone.services.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,7 +21,9 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.crypto.Data;
 import java.io.IOException;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -62,6 +67,21 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         response.addHeader(SecurityConstants.HEADER_STRING, SecurityConstants.TOKEN_PREFIX + token);
         response.addHeader("user_id", userDto.getUserID());
 
-        response.getWriter().write("{\"token\": \"" + token + "\", \"id\": \"" + userDto.getUserID() + "\"}");
+        String authenticationResponseJsonString = getAuthenticationResponseJsonString(token, userDto.getUserName());
+        response.getWriter().write(authenticationResponseJsonString);
+    }
+
+    private String getAuthenticationResponseJsonString(String jwtToken, String userName) {
+        RefreshTokenService refreshTokenService =
+                (RefreshTokenService) SpringApplicationContext.getBean("refreshTokenService");
+        String token = refreshTokenService.generateRefreshToken().getToken();
+
+        AuthenticationResponse authenticationResponse = AuthenticationResponse.builder()
+                .authenticationToken(jwtToken).refreshToken(token)
+                .expiresAt(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))
+                .username(userName).build();
+
+        Gson gson = new Gson();
+        return gson.toJson(authenticationResponse);
     }
 }

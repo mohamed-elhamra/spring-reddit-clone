@@ -14,11 +14,11 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @EnableWebSecurity
-public class WebConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserService userService;
 
-    public WebConfig(UserService userService) {
+    public SecurityConfig(UserService userService) {
         this.userService = userService;
     }
 
