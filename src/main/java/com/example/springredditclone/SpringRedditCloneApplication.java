@@ -1,5 +1,6 @@
 package com.example.springredditclone;
 
+import com.example.springredditclone.configuration.SwaggerConfig;
 import com.example.springredditclone.dtos.PostDto;
 import com.example.springredditclone.dtos.SubredditDto;
 
@@ -22,6 +23,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableAsync;
 
 
@@ -29,6 +31,7 @@ import java.util.List;
 
 @SpringBootApplication
 @EnableAsync
+@Import(SwaggerConfig.class)
 public class SpringRedditCloneApplication {
 
     public static void main(String[] args) {
