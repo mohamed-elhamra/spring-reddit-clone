@@ -2,20 +2,28 @@ package com.example.springredditclone;
 
 import com.example.springredditclone.dtos.PostDto;
 import com.example.springredditclone.dtos.SubredditDto;
+
+import com.example.springredditclone.entities.CommentEntity;
+import com.example.springredditclone.entities.PostEntity;
 import com.example.springredditclone.repositories.CommentRepository;
+import com.example.springredditclone.responses.CommentResponse;
+import com.example.springredditclone.responses.PostResponse;
 import com.example.springredditclone.responses.SubredditResponse;
+import lombok.AllArgsConstructor;
 import org.modelmapper.AbstractConverter;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.PropertyMap;
 import org.modelmapper.convention.MatchingStrategies;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import org.modelmapper.spi.MappingContext;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableAsync;
+
 
 import java.util.List;
 
@@ -27,7 +35,7 @@ public class SpringRedditCloneApplication {
         SpringApplication.run(SpringRedditCloneApplication.class, args);
     }
 
-    @Bean("PostsListToPostsCount")
+    @Bean("subredditDtoToSubredditResponse")
     public ModelMapper postsListToPostsCount() {
         ModelMapper modelMapper = new ModelMapper();
         Converter<List<PostDto>, Integer> subredditPostsListToPostsCountConverter =

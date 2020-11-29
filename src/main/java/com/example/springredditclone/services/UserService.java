@@ -17,5 +17,5 @@ public interface UserService extends UserDetailsService {
 
     UserEntity getCurrentUser();
 
-    List<CommentDto> getCommentsByUser(String email);
+    List<CommentDto> getCommentsByUser(String userName);
 }

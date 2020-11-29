@@ -24,7 +24,7 @@ public class SubredditController {
     private SubredditService subredditService;
 
     @Autowired
-    @Qualifier("PostsListToPostsCount")
+    @Qualifier("subredditDtoToSubredditResponse")
     private ModelMapper modelMapper;
 
     @PostMapping

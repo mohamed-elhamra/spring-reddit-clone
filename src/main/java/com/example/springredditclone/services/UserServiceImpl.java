@@ -125,9 +125,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<CommentDto> getCommentsByUser(String email) {
-        UserEntity user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("No user found with this email: " + email));
+    public List<CommentDto> getCommentsByUser(String userName) {
+        UserEntity user = userRepository.findByUserName(userName)
+                .orElseThrow(() -> new UsernameNotFoundException("No user found with this user name: " + userName));
         List<CommentEntity> commentEntities = commentRepository.findAllByUser(user);
 
         return commentEntities.stream()

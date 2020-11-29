@@ -8,7 +8,9 @@ import com.example.springredditclone.responses.CommentResponse;
 import com.example.springredditclone.responses.PostResponse;
 import com.example.springredditclone.services.PostService;
 import com.example.springredditclone.utils.Mapper;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +30,7 @@ public class PostController {
     public ResponseEntity<PostResponse> createPost(@RequestBody PostRequest postRequest, Principal principal) {
         PostDto postDto = Mapper.getMapper().map(postRequest, PostDto.class);
         PostDto createdPost = postService.createPost(postDto, principal.getName(), postRequest.getSubredditName());
-        PostResponse postResponse = Mapper.getMapper().map(createdPost, PostResponse.class);
+        PostResponse postResponse = postService.postDtoToPostResponse(createdPost);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(postResponse);
     }
@@ -37,7 +39,7 @@ public class PostController {
     public ResponseEntity<?> getAllPosts() {
         List<PostDto> postDtoList = postService.getAllPosts();
         List<PostResponse> postResponses = postDtoList.stream().
-                map(postDto -> Mapper.getMapper().map(postDto, PostResponse.class))
+                map(postDto -> postService.postDtoToPostResponse(postDto))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(postResponses);
     }
@@ -45,7 +47,7 @@ public class PostController {
     @GetMapping("/{id}")
     public ResponseEntity<PostResponse> getPostById(@PathVariable long id) {
         PostDto postDto = postService.getPostById(id);
-        PostResponse postResponse = Mapper.getMapper().map(postDto, PostResponse.class);
+        PostResponse postResponse = postService.postDtoToPostResponse(postDto);
         return ResponseEntity.ok(postResponse);
     }
 

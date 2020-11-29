@@ -20,7 +20,7 @@ public class UserEntity {
 
     private String userID;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 50, unique = true)
     private String userName;
 
     @Column(nullable = false, length = 50, unique = true)

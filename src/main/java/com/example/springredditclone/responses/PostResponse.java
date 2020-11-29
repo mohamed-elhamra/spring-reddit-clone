@@ -1,6 +1,7 @@
 package com.example.springredditclone.responses;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,6 +10,7 @@ import java.time.Instant;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class PostResponse {
 
     private String postName;
@@ -18,5 +20,7 @@ public class PostResponse {
     private Instant createdDate;
     private String userUserName;
     private String subredditName;
+    private long commentCount;
+    private String duration;
 
 }

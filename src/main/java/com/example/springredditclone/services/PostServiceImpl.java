@@ -11,8 +11,11 @@ import com.example.springredditclone.repositories.CommentRepository;
 import com.example.springredditclone.repositories.PostRepository;
 import com.example.springredditclone.repositories.SubredditRepository;
 import com.example.springredditclone.repositories.UserRepository;
+import com.example.springredditclone.responses.PostResponse;
 import com.example.springredditclone.responses.UserResponse;
 import com.example.springredditclone.utils.Mapper;
+import com.github.marlonlom.utilities.timeago.TimeAgo;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -78,4 +81,24 @@ public class PostServiceImpl implements PostService {
                 .map(commentEntity -> Mapper.getMapper().map(commentEntity, CommentDto.class))
                 .collect(Collectors.toList());
     }
+
+    public PostResponse postDtoToPostResponse(PostDto postDto){
+        PostEntity postEntity = Mapper.getMapper().map(postDto, PostEntity.class);
+        long numberOfCommentsInPost = commentRepository.findAllByPost(postEntity).size();
+
+        String postDuration = getDuration(postDto);
+
+        return PostResponse.builder().postName(postDto.getPostName())
+                .url(postDto.getUrl()).description(postDto.getDescription())
+                .voteCount(postDto.getVoteCount()).createdDate(postDto.getCreatedDate())
+                .userUserName(postDto.getUser().getUserName())
+                .subredditName(postDto.getSubreddit().getName())
+                .commentCount(numberOfCommentsInPost).duration(postDuration)
+                .build();
+    }
+
+    private String getDuration(PostDto postDto){
+        return TimeAgo.using(postDto.getCreatedDate().toEpochMilli());
+    }
+
 }

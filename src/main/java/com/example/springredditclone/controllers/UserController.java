@@ -39,9 +39,9 @@ public class UserController {
         return ResponseEntity.ok("Account Activated Successfully");
     }
 
-    @GetMapping("/{email}/comments")
-    public ResponseEntity<?> getCommentsByUser(@PathVariable String email){
-        List<CommentDto> comments = userService.getCommentsByUser(email);
+    @GetMapping("/{userName}/comments")
+    public ResponseEntity<?> getCommentsByUser(@PathVariable String userName){
+        List<CommentDto> comments = userService.getCommentsByUser(userName);
         List<CommentResponse> responseList = comments.stream()
                 .map(commentDto -> Mapper.getMapper().map(commentDto, CommentResponse.class))
                 .collect(Collectors.toList());
