@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import java.time.Instant;
 
 @Data
@@ -13,6 +14,7 @@ import java.time.Instant;
 @NoArgsConstructor
 public class CommentRequest {
 
+    @NotBlank
     private String text;
     private long postId;
 

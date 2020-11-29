@@ -3,6 +3,8 @@ package com.example.springredditclone.services;
 import com.example.springredditclone.dtos.CommentDto;
 import com.example.springredditclone.dtos.UserDto;
 import com.example.springredditclone.entities.UserEntity;
+import com.example.springredditclone.requests.RefreshTokenRequest;
+import com.example.springredditclone.responses.AuthenticationResponse;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
@@ -18,4 +20,8 @@ public interface UserService extends UserDetailsService {
     UserEntity getCurrentUser();
 
     List<CommentDto> getCommentsByUser(String userName);
+
+    AuthenticationResponse refreshToken(RefreshTokenRequest refreshTokenRequest);
+
+    void logout(RefreshTokenRequest refreshTokenRequest);
 }

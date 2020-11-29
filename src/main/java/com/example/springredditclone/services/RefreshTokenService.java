@@ -7,12 +7,14 @@ import com.example.springredditclone.repositories.RefreshTokenRepository;
 import com.example.springredditclone.utils.Mapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.UUID;
 
 @Service
 @AllArgsConstructor
+@Transactional
 public class RefreshTokenService {
 
     private final RefreshTokenRepository refreshTokenRepository;

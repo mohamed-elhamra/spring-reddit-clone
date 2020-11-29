@@ -10,13 +10,15 @@ import com.example.springredditclone.exceptions.SpringRedditException;
 import com.example.springredditclone.repositories.CommentRepository;
 import com.example.springredditclone.repositories.UserRepository;
 import com.example.springredditclone.repositories.VerificationTokenRepository;
-import com.example.springredditclone.responses.CommentResponse;
+import com.example.springredditclone.requests.RefreshTokenRequest;
+import com.example.springredditclone.responses.AuthenticationResponse;
+import com.example.springredditclone.security.SecurityConstants;
 import com.example.springredditclone.utils.IDGenerator;
 import com.example.springredditclone.utils.Mapper;
 import com.example.springredditclone.utils.NotificationEmail;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -30,10 +32,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,21 +40,18 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
-
     @Autowired
     private IDGenerator idGenerator;
-
     @Autowired
     private VerificationTokenRepository verificationTokenRepository;
-
     @Autowired
     private CommentRepository commentRepository;
-
     @Autowired
     private MailService mailService;
+    @Autowired
+    private RefreshTokenService refreshTokenService;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -129,10 +125,34 @@ public class UserServiceImpl implements UserService {
         UserEntity user = userRepository.findByUserName(userName)
                 .orElseThrow(() -> new UsernameNotFoundException("No user found with this user name: " + userName));
         List<CommentEntity> commentEntities = commentRepository.findAllByUser(user);
-
         return commentEntities.stream()
                 .map(commentEntity -> Mapper.getMapper().map(commentEntity, CommentDto.class))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public AuthenticationResponse refreshToken(RefreshTokenRequest refreshTokenRequest) {
+        refreshTokenService.validateRefreshToken(refreshTokenRequest.getToken());
+        UserDetails springUser = loadUserByUsername(refreshTokenRequest.getEmail());
+        UserDto userDto = getUserByEmail(refreshTokenRequest.getEmail());
+
+        String jwt = Jwts.builder()
+                .setSubject(refreshTokenRequest.getEmail())
+                .claim("id", userDto.getUserID())
+                .claim("username", userDto.getUserName())
+                .claim("roles", springUser.getAuthorities())
+                .setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))
+                .signWith(SignatureAlgorithm.HS512, SecurityConstants.TOKEN_SECRET)
+                .compact();
+
+        return AuthenticationResponse.builder()
+                .authenticationToken(jwt).refreshToken(refreshTokenRequest.getToken())
+                .expiresAt(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))
+                .username(refreshTokenRequest.getEmail()).build();
+    }
+
+    public void logout(RefreshTokenRequest refreshTokenRequest){
+        refreshTokenService.deleteRefreshToken(refreshTokenRequest.getToken());
     }
 
 }

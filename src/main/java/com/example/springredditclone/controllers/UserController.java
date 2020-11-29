@@ -3,6 +3,8 @@ package com.example.springredditclone.controllers;
 
 import com.example.springredditclone.dtos.CommentDto;
 import com.example.springredditclone.dtos.UserDto;
+import com.example.springredditclone.requests.RefreshTokenRequest;
+import com.example.springredditclone.responses.AuthenticationResponse;
 import com.example.springredditclone.responses.CommentResponse;
 import com.example.springredditclone.responses.UserResponse;
 import com.example.springredditclone.requests.UserRequest;
@@ -48,4 +50,14 @@ public class UserController {
         return ResponseEntity.ok(responseList);
     }
 
+    @GetMapping("/refresh/token")
+    public ResponseEntity<AuthenticationResponse> refreshToken(@RequestBody @Valid RefreshTokenRequest refreshTokenRequest){
+        return  ResponseEntity.ok(userService.refreshToken(refreshTokenRequest));
+    }
+
+    @GetMapping("/logout")
+    public ResponseEntity<String> logout(@RequestBody @Valid RefreshTokenRequest refreshTokenRequest){
+        userService.logout(refreshTokenRequest);
+        return ResponseEntity.ok("Refresh Token Deleted Successfully!!");
+    }
 }

@@ -24,8 +24,6 @@ public class VoteController {
     @PostMapping
     public ResponseEntity<VoteResponse> createVote(@RequestBody VoteRequest voteRequest){
         VoteDto voteDto = Mapper.getMapper().map(voteRequest, VoteDto.class);
-        System.out.println(voteRequest.toString());
-        System.out.println(voteDto.toString());
         VoteDto createdVote = voteService.createVote(voteDto, voteRequest.getPostId());
         VoteResponse response = Mapper.getMapper().map(createdVote, VoteResponse.class);
 
