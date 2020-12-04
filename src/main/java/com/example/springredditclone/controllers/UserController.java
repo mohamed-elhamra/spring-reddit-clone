@@ -2,12 +2,15 @@ package com.example.springredditclone.controllers;
 
 
 import com.example.springredditclone.dtos.CommentDto;
+import com.example.springredditclone.dtos.PostDto;
 import com.example.springredditclone.dtos.UserDto;
 import com.example.springredditclone.requests.RefreshTokenRequest;
 import com.example.springredditclone.responses.AuthenticationResponse;
 import com.example.springredditclone.responses.CommentResponse;
+import com.example.springredditclone.responses.PostResponse;
 import com.example.springredditclone.responses.UserResponse;
 import com.example.springredditclone.requests.UserRequest;
+import com.example.springredditclone.services.PostService;
 import com.example.springredditclone.services.UserService;
 import com.example.springredditclone.utils.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +28,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private PostService postService;
 
     @PostMapping
     public ResponseEntity<UserResponse> createUser(@RequestBody @Valid UserRequest userRequest) {
@@ -46,6 +52,15 @@ public class UserController {
         List<CommentDto> comments = userService.getCommentsByUser(userName);
         List<CommentResponse> responseList = comments.stream()
                 .map(commentDto -> Mapper.getMapper().map(commentDto, CommentResponse.class))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(responseList);
+    }
+
+    @GetMapping("/{userName}/posts")
+    public ResponseEntity<?> getPostsByUser(@PathVariable String userName){
+        List<PostDto> posts = userService.getPostsByUser(userName);
+        List<PostResponse> responseList = posts.stream()
+                .map(postDto -> postService.postDtoToPostResponse(postDto))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(responseList);
     }

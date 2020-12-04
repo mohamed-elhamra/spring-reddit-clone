@@ -1,5 +1,6 @@
 package com.example.springredditclone.services;
 
+import com.example.springredditclone.dtos.PostDto;
 import com.example.springredditclone.dtos.SubredditDto;
 
 import java.util.List;
@@ -11,4 +12,6 @@ public interface SubredditService {
     List<SubredditDto> getAllSubreddits();
 
     SubredditDto getSubredditById(long id);
+
+    List<PostDto> getPostsBySubreddit(long subRedditId);
 }

@@ -1,6 +1,7 @@
 package com.example.springredditclone.services;
 
 import com.example.springredditclone.dtos.CommentDto;
+import com.example.springredditclone.dtos.PostDto;
 import com.example.springredditclone.dtos.UserDto;
 import com.example.springredditclone.entities.UserEntity;
 import com.example.springredditclone.requests.RefreshTokenRequest;
@@ -24,4 +25,6 @@ public interface UserService extends UserDetailsService {
     AuthenticationResponse refreshToken(RefreshTokenRequest refreshTokenRequest);
 
     void logout(RefreshTokenRequest refreshTokenRequest);
+
+    List<PostDto> getPostsByUser(String userName);
 }

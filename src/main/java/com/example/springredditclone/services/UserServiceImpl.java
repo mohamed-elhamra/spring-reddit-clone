@@ -2,12 +2,15 @@ package com.example.springredditclone.services;
 
 
 import com.example.springredditclone.dtos.CommentDto;
+import com.example.springredditclone.dtos.PostDto;
 import com.example.springredditclone.dtos.UserDto;
 import com.example.springredditclone.entities.CommentEntity;
+import com.example.springredditclone.entities.PostEntity;
 import com.example.springredditclone.entities.UserEntity;
 import com.example.springredditclone.entities.VerificationTokenEntity;
 import com.example.springredditclone.exceptions.SpringRedditException;
 import com.example.springredditclone.repositories.CommentRepository;
+import com.example.springredditclone.repositories.PostRepository;
 import com.example.springredditclone.repositories.UserRepository;
 import com.example.springredditclone.repositories.VerificationTokenRepository;
 import com.example.springredditclone.requests.RefreshTokenRequest;
@@ -52,6 +55,9 @@ public class UserServiceImpl implements UserService {
     private MailService mailService;
     @Autowired
     private RefreshTokenService refreshTokenService;
+
+    @Autowired
+    private PostRepository postRepository;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -153,6 +159,16 @@ public class UserServiceImpl implements UserService {
 
     public void logout(RefreshTokenRequest refreshTokenRequest){
         refreshTokenService.deleteRefreshToken(refreshTokenRequest.getToken());
+    }
+
+    @Override
+    public List<PostDto> getPostsByUser(String userName) {
+        UserEntity user = userRepository.findByUserName(userName)
+                .orElseThrow(() -> new UsernameNotFoundException("No user found with this user name: " + userName));
+        List<PostEntity> postEntities = postRepository.findAllByUser(user);
+        return postEntities.stream()
+                .map(postEntity -> Mapper.getMapper().map(postEntity, PostDto.class))
+                .collect(Collectors.toList());
     }
 
 }

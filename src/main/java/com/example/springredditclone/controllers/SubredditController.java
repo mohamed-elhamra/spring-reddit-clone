@@ -1,9 +1,12 @@
 package com.example.springredditclone.controllers;
 
 
+import com.example.springredditclone.dtos.PostDto;
 import com.example.springredditclone.dtos.SubredditDto;
 import com.example.springredditclone.requests.SubredditRequest;
+import com.example.springredditclone.responses.PostResponse;
 import com.example.springredditclone.responses.SubredditResponse;
+import com.example.springredditclone.services.PostService;
 import com.example.springredditclone.services.SubredditService;
 import com.example.springredditclone.utils.Mapper;
 import org.modelmapper.ModelMapper;
@@ -22,6 +25,9 @@ public class SubredditController {
 
     @Autowired
     private SubredditService subredditService;
+
+    @Autowired
+    private PostService postService;
 
     @Autowired
     @Qualifier("subredditDtoToSubredditResponse")
@@ -52,6 +58,15 @@ public class SubredditController {
         SubredditResponse subredditResponse = modelMapper.map(subredditDto, SubredditResponse.class);
 
         return ResponseEntity.ok(subredditResponse);
+    }
+
+    @GetMapping("/{subRedditId}/posts")
+    public ResponseEntity<?> getPostsBySubreddit(@PathVariable long subRedditId){
+        List<PostDto> posts = subredditService.getPostsBySubreddit(subRedditId);
+        List<PostResponse> responseList = posts.stream()
+                .map(postDto -> postService.postDtoToPostResponse(postDto))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(responseList);
     }
 
 }

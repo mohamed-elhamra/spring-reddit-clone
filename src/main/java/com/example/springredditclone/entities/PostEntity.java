@@ -31,11 +31,11 @@ public class PostEntity {
     private Integer voteCount = 0;
     private Instant createdDate;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private UserEntity user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "subreddit_id", referencedColumnName = "id")
     private SubredditEntity subreddit;
 

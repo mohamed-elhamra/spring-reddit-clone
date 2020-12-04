@@ -13,6 +13,7 @@ import java.time.Instant;
 @Builder
 public class PostResponse {
 
+    private long id;
     private String postName;
     private String url;
     private String description;

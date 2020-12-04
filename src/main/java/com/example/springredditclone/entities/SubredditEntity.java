@@ -25,10 +25,10 @@ public class SubredditEntity {
     private String description;
     private Instant createdDate;
 
-    @OneToMany(mappedBy = "subreddit")
+    @OneToMany(mappedBy = "subreddit", fetch = FetchType.LAZY)
     private List<PostEntity> posts;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private UserEntity user;
 }

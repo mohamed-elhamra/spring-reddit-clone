@@ -63,6 +63,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<PostDto> getAllPosts() {
         List<PostEntity> postEntities = postRepository.findAll();
+        System.out.println(postEntities.get(0).getPostName());;
         return postEntities.stream()
                 .map(postEntity -> Mapper.getMapper().map(postEntity, PostDto.class))
                 .collect(Collectors.toList());
@@ -92,7 +93,8 @@ public class PostServiceImpl implements PostService {
 
         String postDuration = getDuration(postDto);
 
-        return PostResponse.builder().postName(postDto.getPostName())
+        return PostResponse.builder().id(postEntity.getId())
+                .postName(postDto.getPostName())
                 .url(postDto.getUrl()).description(postDto.getDescription())
                 .voteCount(postDto.getVoteCount()).createdDate(postDto.getCreatedDate())
                 .userUserName(postDto.getUser().getUserName())
