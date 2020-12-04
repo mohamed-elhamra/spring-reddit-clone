@@ -148,7 +148,7 @@ public class UserServiceImpl implements UserService {
         return AuthenticationResponse.builder()
                 .authenticationToken(jwt).refreshToken(refreshTokenRequest.getToken())
                 .expiresAt(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))
-                .username(refreshTokenRequest.getEmail()).build();
+                .email(refreshTokenRequest.getEmail()).build();
     }
 
     public void logout(RefreshTokenRequest refreshTokenRequest){

@@ -14,6 +14,7 @@ import com.example.springredditclone.repositories.UserRepository;
 import com.example.springredditclone.responses.PostResponse;
 import com.example.springredditclone.responses.UserResponse;
 import com.example.springredditclone.utils.Mapper;
+import com.example.springredditclone.utils.VoteType;
 import com.github.marlonlom.utilities.timeago.TimeAgo;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,9 @@ public class PostServiceImpl implements PostService {
 
     @Autowired
     private CommentRepository commentRepository;
+
+    @Autowired
+    private VoteService voteService;
 
     @Override
     public PostDto createPost(PostDto postDto, String email, String subredditName) {
@@ -94,11 +98,20 @@ public class PostServiceImpl implements PostService {
                 .userUserName(postDto.getUser().getUserName())
                 .subredditName(postDto.getSubreddit().getName())
                 .commentCount(numberOfCommentsInPost).duration(postDuration)
+                .upVote(isPostUpVoted(postEntity)).downVote(isPostDownVoted(postEntity))
                 .build();
     }
 
     private String getDuration(PostDto postDto){
         return TimeAgo.using(postDto.getCreatedDate().toEpochMilli());
+    }
+
+    boolean isPostUpVoted(PostEntity post) {
+        return voteService.checkVoteType(post, VoteType.UPVOTE);
+    }
+
+    boolean isPostDownVoted(PostEntity post) {
+        return voteService.checkVoteType(post, VoteType.DOWNVOTE);
     }
 
 }

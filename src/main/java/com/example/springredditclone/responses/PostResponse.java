@@ -22,5 +22,7 @@ public class PostResponse {
     private String subredditName;
     private long commentCount;
     private String duration;
+    private boolean upVote;
+    private boolean downVote;
 
 }

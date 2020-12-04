@@ -10,6 +10,7 @@ import com.example.springredditclone.repositories.VoteRepository;
 import com.example.springredditclone.utils.Mapper;
 import com.example.springredditclone.utils.VoteType;
 import lombok.AllArgsConstructor;
+import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -53,4 +54,14 @@ public class VoteServiceImpl implements VoteService {
 
         return Mapper.getMapper().map(createdVote, VoteDto.class);
     }
+
+    public boolean checkVoteType(PostEntity post, VoteType voteType) {
+        Optional<VoteEntity> voteForPostByUser =
+                voteRepository.findTopByPostAndUserOrderByIdDesc(post,
+                        userService.getCurrentUser());
+        return voteForPostByUser.filter(vote -> vote.getVoteType().equals(voteType))
+                .isPresent();
+    }
+
 }
+

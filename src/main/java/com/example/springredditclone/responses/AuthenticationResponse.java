@@ -18,6 +18,6 @@ public class AuthenticationResponse {
     private String authenticationToken;
     private String refreshToken;
     private Date expiresAt;
-    private String username;
+    private String email;
 
 }

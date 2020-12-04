@@ -79,7 +79,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         AuthenticationResponse authenticationResponse = AuthenticationResponse.builder()
                 .authenticationToken(jwtToken).refreshToken(token)
                 .expiresAt(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))
-                .username(userName).build();
+                .email(userName).build();
 
         Gson gson = new Gson();
         return gson.toJson(authenticationResponse);
