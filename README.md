@@ -4,4 +4,17 @@ Reddit clone built using Spring Boot, Spring Security with JPA Authentication, S
 
 # Screenshots
 
-<img src="/1.PNG" alt="drawing" width="350" height="350"/>
+1.Registration page
+<img src="/1.PNG" alt="drawing" width="600" height="400"/>
+
+2.Login page
+<img src="/2.PNG" alt="drawing" width="600" height="400"/>
+
+2.Home page
+<img src="/4.PNG" alt="drawing" width="600" height="400"/>
+
+2.Create post page
+<img src="/5.PNG" alt="drawing" width="600" height="400"/>
+
+2.Create subreddit page
+<img src="/6.PNG" alt="drawing" width="600" height="400"/>
