@@ -17,7 +17,7 @@ Live Demo: https://redditclone-app.herokuapp.com/
 
 3.Home page <br />
 
-<img src="/4.PNG" alt="drawing" width="820" height="400""/>
+<img src="/4.PNG" alt="drawing" width="820" height="400"/>
 <br /><br />
 
 4.Create post page <br />
