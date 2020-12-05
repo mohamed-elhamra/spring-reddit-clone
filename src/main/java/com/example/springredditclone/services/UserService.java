@@ -27,4 +27,6 @@ public interface UserService extends UserDetailsService {
     void logout(RefreshTokenRequest refreshTokenRequest);
 
     List<PostDto> getPostsByUser(String userName);
+
+    boolean isLoggedIn();
 }

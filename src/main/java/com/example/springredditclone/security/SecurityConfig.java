@@ -26,9 +26,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
                 .authorizeRequests()
-                .antMatchers(SecurityConstants.SIGN_UP_URL + "/**")
-                .permitAll()
                 .antMatchers(HttpMethod.GET, "/subreddits/**", "/posts/**")
+                .permitAll()
+                .antMatchers(SecurityConstants.SIGN_UP_URL + "/**")
                 .permitAll()
                 .antMatchers("/v2/api-docs",
                         "/configuration/ui",

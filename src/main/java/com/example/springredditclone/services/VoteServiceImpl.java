@@ -56,11 +56,14 @@ public class VoteServiceImpl implements VoteService {
     }
 
     public boolean checkVoteType(PostEntity post, VoteType voteType) {
-        Optional<VoteEntity> voteForPostByUser =
-                voteRepository.findTopByPostAndUserOrderByIdDesc(post,
-                        userService.getCurrentUser());
-        return voteForPostByUser.filter(vote -> vote.getVoteType().equals(voteType))
-                .isPresent();
+        if(userService.isLoggedIn()){
+            Optional<VoteEntity> voteForPostByUser =
+                    voteRepository.findTopByPostAndUserOrderByIdDesc(post,
+                            userService.getCurrentUser());
+            return voteForPostByUser.filter(vote -> vote.getVoteType().equals(voteType))
+                    .isPresent();
+        }
+        return false;
     }
 
 }
