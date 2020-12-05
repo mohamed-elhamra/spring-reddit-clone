@@ -22,7 +22,7 @@ Live Demo: https://redditclone-app.herokuapp.com/
 
 4.Create post page <br />
 
-<img src="/5.PNG" alt="drawing" width="1000" height="400"/>
+<img src="/5.PNG" alt="drawing" width="800" height="400"/>
 <br /><br />
 
 5.Create subreddit page <br />
